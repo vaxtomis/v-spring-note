@@ -32,8 +32,17 @@ import org.springframework.lang.Nullable;
  * A placeholder takes the form {@code ${name}}. Using {@code PropertyPlaceholderHelper}
  * these placeholders can be substituted for user-supplied values.
  *
+ * 用于处理包含占位符值的字符串的实用程序类。
+ * 占位符采用 {@code ${name}} 的形式。
+ * 使用 {@code PropertyPlaceholderHelper} 这些占位符可以替换为用户提供的值。
+ *
+ * @attention ！！注意区分，这个是工具类。！！
+ * 不同于 PropertyPlaceholderConfigurer / PropertySourcesPlaceholderConfigurer
+ *
  * <p>Values for substitution can be supplied using a {@link Properties} instance or
  * using a {@link PlaceholderResolver}.
+ *
+ * 可以使用 {@link Properties} 实例或使用 {@link PlaceholderResolver} 提供替换值。
  *
  * @author Juergen Hoeller
  * @author Rob Harrop

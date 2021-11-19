@@ -70,6 +70,9 @@ import org.springframework.beans.BeansException;
 public interface BeanFactoryPostProcessor {
 
 	/**
+	 * Spring 提供的容器扩展机制，允许我们在容器实例化相应对象之前，对注册到容器的
+	 * BeanDefinition 所保存的信息做相应的修改。
+	 *
 	 * Modify the application context's internal bean factory after its standard
 	 * initialization. All bean definitions will have been loaded, but no beans
 	 * will have been instantiated yet. This allows for overriding or adding

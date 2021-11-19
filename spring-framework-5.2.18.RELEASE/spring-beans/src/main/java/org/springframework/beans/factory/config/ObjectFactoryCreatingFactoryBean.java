@@ -25,9 +25,17 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
+ * 由 Spring 提供的一个 FactoryBean 实现，它返回一个 ObjectFactory 实例。
+ * 这个实例可以为我们返回容器管理的相关对象。
+ * 其实目的就是为了隔离客户端对象对 BeanFactory 直接引用（通过 getObject()）。
+ *
  * A {@link org.springframework.beans.factory.FactoryBean} implementation that
  * returns a value which is an {@link org.springframework.beans.factory.ObjectFactory}
  * that in turn returns a bean sourced from a {@link org.springframework.beans.factory.BeanFactory}.
+ *
+ * 一个 {@link org.springframework.beans.factory.FactoryBean} 实现，
+ * 它返回一个 {@link org.springframework.beans.factory.ObjectFactory}，
+ * 该 ObjectFactory 又返回 {@link org.springframework.beans.factory.BeanFactory}。
  *
  * <p>As such, this may be used to avoid having a client object directly calling
  * {@link org.springframework.beans.factory.BeanFactory#getBean(String)} to get

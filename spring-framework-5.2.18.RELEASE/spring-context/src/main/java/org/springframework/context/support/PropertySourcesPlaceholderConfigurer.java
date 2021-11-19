@@ -40,6 +40,10 @@ import org.springframework.util.StringValueResolver;
  * within bean definition property values and {@code @Value} annotations against the current
  * Spring {@link Environment} and its set of {@link PropertySources}.
  *
+ * {@link PlaceholderConfigurerSupport} 的专门化，
+ * 它解析 bean 定义属性值和 {@code @Value} 注释中的 ${...} 占位符
+ * 在当前 Spring {@link Environment} 及其它的 {@link PropertySources} 集中。
+ *
  * <p>This class is designed as a general replacement for {@code PropertyPlaceholderConfigurer}.
  * It is used by default to support the {@code property-placeholder} element in working against
  * the spring-context-3.1 or higher XSD; whereas, spring-context versions &lt;= 3.0 default to

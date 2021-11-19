@@ -27,8 +27,13 @@ import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.BeanInitializationException;
 
 /**
+ * 可以通过 PropertyOverrideConfigurer 对容器中配置的任何你想处理的 bean 定义的
+ * property 信息进行覆盖替换。
+ *
  * Property resource configurer that overrides bean property values in an application
  * context definition. It <i>pushes</i> values from a properties file into bean definitions.
+ *
+ * 覆盖应用程序上下文定义中 bean 属性值的属性资源配置器。它将属性文件中的值推送到 bean 定义中。
  *
  * <p>Configuration lines are expected to be of the following form:
  *
@@ -42,6 +47,10 @@ import org.springframework.beans.factory.BeanInitializationException;
  * In contrast to PropertyPlaceholderConfigurer, the original definition can have default
  * values or no values at all for such bean properties. If an overriding properties file does
  * not have an entry for a certain bean property, the default context definition is used.
+ *
+ * 与 PropertyPlaceholderConfigurer 不同的是，
+ * 原始定义对于此类 bean 属性可以具有默认值或根本没有值。
+ * 如果覆盖属性文件没有特定 bean 属性的条目，则使用默认上下文定义。
  *
  * <p>Note that the context definition <i>is not</i> aware of being overridden;
  * so this is not immediately obvious when looking at the XML definition file.
