@@ -23,10 +23,18 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * 该 PropertyEditor 会将符合 CSV 格式的字符串转换成 String[] 数组的形式，
+ * 默认是以 (,) 分隔的字符串。但可以指定自定义的字符串分隔符。
+ * {@link ByteArrayPropertyEditor} 和 {@link CharArrayPropertyEditor}
+ * 等都属于类似功能的 {@link java.beans.PropertyEditor}
+ *
  * Custom {@link java.beans.PropertyEditor} for String arrays.
  *
  * <p>Strings must be in CSV format, with a customizable separator.
  * By default values in the result are trimmed of whitespace.
+ *
+ * 字符串必须是 CSV 格式，带有可自定义的分隔符。默认情况下，结果中的值会去除空格。
+ *
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

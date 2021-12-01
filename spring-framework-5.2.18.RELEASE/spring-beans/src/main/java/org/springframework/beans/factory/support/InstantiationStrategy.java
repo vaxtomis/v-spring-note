@@ -26,8 +26,16 @@ import org.springframework.lang.Nullable;
 /**
  * Interface responsible for creating instances corresponding to a root bean definition.
  *
+ * 负责创建对应于根 bean 定义的实例的接口。
+ *
  * <p>This is pulled out into a strategy as various approaches are possible,
  * including using CGLIB to create subclasses on the fly to support Method Injection.
+ *
+ * 由于各种方法都是可能的，因此将其纳入策略中，包括使用 CGLIB 动态创建子类以支持方法注入。
+ *
+ * 相关实现：
+ * 反射：{@link SimpleInstantiationStrategy}
+ * CGLIB：{@link CglibSubclassingInstantiationStrategy}
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -37,10 +45,16 @@ public interface InstantiationStrategy {
 
 	/**
 	 * Return an instance of the bean with the given name in this factory.
+	 *
+	 * 通过给出的名字来返回工厂中对应 bean 的实例。
+	 *
 	 * @param bd the bean definition
 	 * @param beanName the name of the bean when it is created in this context.
 	 * The name can be {@code null} if we are autowiring a bean which doesn't
 	 * belong to the factory.
+	 *
+	 * 如果我们自动装配一个不属于工厂的 bean，名称可以是 null。
+	 *
 	 * @param owner the owning BeanFactory
 	 * @return a bean instance for this bean definition
 	 * @throws BeansException if the instantiation attempt failed
@@ -51,6 +65,9 @@ public interface InstantiationStrategy {
 	/**
 	 * Return an instance of the bean with the given name in this factory,
 	 * creating it via the given constructor.
+	 *
+	 * 通过给出的名字来返回工厂中对应 bean 的实例。（通过给定的构造方法创建）
+	 *
 	 * @param bd the bean definition
 	 * @param beanName the name of the bean when it is created in this context.
 	 * The name can be {@code null} if we are autowiring a bean which doesn't
@@ -67,6 +84,9 @@ public interface InstantiationStrategy {
 	/**
 	 * Return an instance of the bean with the given name in this factory,
 	 * creating it via the given factory method.
+	 *
+	 * 通过给出的名字来返回工厂中对应 bean 的实例。（通过给定的工厂方法创建）
+	 *
 	 * @param bd the bean definition
 	 * @param beanName the name of the bean when it is created in this context.
 	 * The name can be {@code null} if we are autowiring a bean which doesn't

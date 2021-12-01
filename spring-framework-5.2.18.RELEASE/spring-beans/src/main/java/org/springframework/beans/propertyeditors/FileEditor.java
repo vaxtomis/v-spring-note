@@ -27,11 +27,19 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * Spring 提供的对应 java.io.File 类型的 PropertyEditor，同属于对资源进行定位的实现还有
+ * {@link InputStreamEditor} 和 {@link URLEditor}
+ *
  * Editor for {@code java.io.File}, to directly populate a File property
  * from a Spring resource location.
  *
+ * {@code java.io.File} 的编辑器，用于直接从 Spring 资源位置填充 File 属性。
+ *
  * <p>Supports Spring-style URL notation: any fully qualified standard URL
  * ("file:", "http:", etc) and Spring's special "classpath:" pseudo-URL.
+ *
+ * 支持 Spring 风格的 URL表示法：任何完全限定的标准 URL（"file:"、"http:"等）
+ * 和 Spring 的特殊 "classpath:" 伪 URL。
  *
  * <p><b>NOTE:</b> The behavior of this editor has changed in Spring 2.0.
  * Previously, it created a File instance directly from a filename.

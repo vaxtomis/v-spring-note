@@ -34,8 +34,12 @@ import org.springframework.util.StringUtils;
 /**
  * Simple object instantiation strategy for use in a BeanFactory.
  *
+ * 在 BeanFactory 中使用的简单对象实例化策略。
+ *
  * <p>Does not support Method Injection, although it provides hooks for subclasses
  * to override to add Method Injection support, for example by overriding methods.
+ *
+ * 不支持方法注入，尽管它为子类提供钩子，使用重写来添加方法注入支持。例如可以重写方法。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -50,6 +54,9 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 	 * Return the factory method currently being invoked or {@code null} if none.
 	 * <p>Allows factory method implementations to determine whether the current
 	 * caller is the container itself as opposed to user code.
+	 *
+	 * 返回当前正在调用的工厂方法或 {@code null}（如果没有）。
+	 * 允许工厂方法实现确定当前调用者是容器本身而不是用户代码。
 	 */
 	@Nullable
 	public static Method getCurrentlyInvokedFactoryMethod() {
@@ -57,21 +64,42 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 	}
 
 
+	/**
+	 * 实例化
+	 * RootBeanDefinition -> extends AbstractBeanDefinition
+	 *
+	 * @param bd the bean definition
+	 * @param beanName the name of the bean when it is created in this context.
+	 * @param owner the owning BeanFactory
+	 */
 	@Override
 	public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner) {
 		// Don't override the class with CGLIB if no overrides.
+		// 如果 BeanDefinition 的 methodOverrides 为空（没有方法被覆盖）
+		// -> methodOverrides 是一个 Set<MethodOverride>
+		//     -> MethodOverride 定义了方法名，是否被覆盖，覆盖方法路径
 		if (!bd.hasMethodOverrides()) {
 			Constructor<?> constructorToUse;
+			// 之所以要加锁，是因为后面的 doPrivileged 方法要求在单独线程内
 			synchronized (bd.constructorArgumentLock) {
+				// 拿到 BeanDefinition 可执行工厂方法（构造方法）的引用
 				constructorToUse = (Constructor<?>) bd.resolvedConstructorOrFactoryMethod;
 				if (constructorToUse == null) {
+					// 获取 Class
 					final Class<?> clazz = bd.getBeanClass();
+					// 过滤掉接口（接口啥信息和实现都没有）
 					if (clazz.isInterface()) {
 						throw new BeanInstantiationException(clazz, "Specified class is an interface");
 					}
 					try {
 						if (System.getSecurityManager() != null) {
+							/**
+							 * AccessController.doPrivileged是一个在 AccessController 类中的静态方法，
+							 * 允许在一个类实例中的代码通知这个 AccessController:它的代码主体是享受 "privileged(特权的)"，
+							 * 访问控制器因此中断栈检查，后续的栈帧对操作的资源不论是否有权限都无关。
+							 */
 							constructorToUse = AccessController.doPrivileged(
+									// 获取 Class 的 getDeclaredConstructor
 									(PrivilegedExceptionAction<Constructor<?>>) clazz::getDeclaredConstructor);
 						}
 						else {
@@ -97,6 +125,10 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 	 * UnsupportedOperationException, if they can instantiate an object with
 	 * the Method Injection specified in the given RootBeanDefinition.
 	 * Instantiation should use a no-arg constructor.
+	 *
+	 * 如果子类可以通过给定的 RootBeanDefinition 指定的注入方法实例化对象，
+	 * 子类就可以重写这个方法，并抛出 UnsupportedOperationException。
+	 * 实例化应该使用无参数构造函数。
 	 */
 	protected Object instantiateWithMethodInjection(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner) {
 		throw new UnsupportedOperationException("Method Injection not supported in SimpleInstantiationStrategy");
@@ -126,6 +158,10 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 	 * UnsupportedOperationException, if they can instantiate an object with
 	 * the Method Injection specified in the given RootBeanDefinition.
 	 * Instantiation should use the given constructor and parameters.
+	 *
+	 * 如果子类可以使用给定 RootBeanDefinition 中指定的方法注入实例化对象，
+	 * 则子类可以覆盖此方法，并抛出 UnsupportedOperationException。
+	 * 实例化应该使用给定的构造函数和参数。
 	 */
 	protected Object instantiateWithMethodInjection(RootBeanDefinition bd, @Nullable String beanName,
 			BeanFactory owner, @Nullable Constructor<?> ctor, Object... args) {

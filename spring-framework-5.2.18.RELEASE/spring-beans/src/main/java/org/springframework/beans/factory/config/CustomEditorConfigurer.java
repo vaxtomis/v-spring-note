@@ -29,8 +29,30 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
 /**
+ * {@link PropertyPlaceholderConfigurer} 和  {@link PropertyOverrideConfigurer}
+ * 都是通过对 BeanDefinition 中的数据进行变更以到达某种目的。
+ * 而 CustomEditorConfigurer 是另一种类型的 BeanFactory 的
+ * BeanFactoryPostProcessor 实现。它只是辅助性地将后期会用到的信息注册到容器
+ * 对 BeanDefinition 不做任何变动。
+ * 无论对象是什么类型，也不管这些对象所声明的依赖对象是什么类型，通常都是通过 XML 文件格式
+ * 来配置这些对象类型。但 XML 所记载的都是 String 类型。
+ * =================================================================
+ * CustomEditorConfigurer 可以帮助我们传达由字符串转换为具体对象规则相关的信息。
+ * =================================================================
+ * 结构：
+ * CustomEditorConfigurer.propertyEditorRegistrars
+ *   -> PropertyEditorRegistrar
+ *        -> PropertyEditor
+ *   -> PropertyEditorRegistrar
+ *        -> PropertyEditor
+ *   ...
+ *
+ *
  * {@link BeanFactoryPostProcessor} implementation that allows for convenient
  * registration of custom {@link PropertyEditor property editors}.
+ *
+ * {@link BeanFactoryPostProcessor} 的实现，
+ * 允许方便地注册自定义 {@link PropertyEditor}。
  *
  * <p>In case you want to register {@link PropertyEditor} instances,
  * the recommended usage as of Spring 2.0 is to use custom
@@ -38,6 +60,11 @@ import org.springframework.util.ClassUtils;
  * desired editor instances on a given
  * {@link org.springframework.beans.PropertyEditorRegistry registry}. Each
  * PropertyEditorRegistrar can register any number of custom editors.
+ *
+ * 如果您想注册 {@link PropertyEditor} 实例，
+ * 从 Spring 2.0 开始，推荐的用法是使用自定义 {@link PropertyEditorRegistrar} 实现，
+ * 然后在给定的 {@link org.springframework.beans.PropertyEditorRegistry}
+ * 上注册任何所需的编辑器实例。每个 PropertyEditorRegistrar 可以注册任意数量的自定义编辑器。
  *
  * <pre class="code">
  * &lt;bean id="customEditorConfigurer" class="org.springframework.beans.factory.config.CustomEditorConfigurer"&gt;

@@ -27,8 +27,13 @@ import org.springframework.util.StringUtils;
  * population of a {@code Class} property without recourse to having to use a
  * String class name property as bridge.
  *
+ * 根据 String 类型的 class 名称，直接将其转换成对应的 Class 对象。相当于 Class.forName(String)。
+ *
  * <p>Also supports "java.lang.String[]"-style array class names, in contrast to the
  * standard {@link Class#forName(String)} method.
+ *
+ * 与标准的 {@link Class#forName(String)} 方法相比，还支持“java.lang.String[]”样式的数组类名。
+ * 达到与提供的 {@link ClassArrayEditor} 同样的目的。
  *
  * @author Juergen Hoeller
  * @author Rick Evans
