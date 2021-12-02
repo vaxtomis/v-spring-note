@@ -67,10 +67,12 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 	/**
 	 * 实例化
 	 * RootBeanDefinition -> extends AbstractBeanDefinition
+	 * 这里是通过 Class 获取声明的无参构造方法
 	 *
 	 * @param bd the bean definition
 	 * @param beanName the name of the bean when it is created in this context.
 	 * @param owner the owning BeanFactory
+	 * @return Object
 	 */
 	@Override
 	public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner) {
@@ -87,7 +89,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 				if (constructorToUse == null) {
 					// 获取 Class
 					final Class<?> clazz = bd.getBeanClass();
-					// 过滤掉接口（接口啥信息和实现都没有）
+					// 过滤掉接口（接口提供不了充分的信息）
 					if (clazz.isInterface()) {
 						throw new BeanInstantiationException(clazz, "Specified class is an interface");
 					}
@@ -134,6 +136,17 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 		throw new UnsupportedOperationException("Method Injection not supported in SimpleInstantiationStrategy");
 	}
 
+	/**
+	 * 实例化，额外添加了 构造方法 和 参数
+	 * 基本同上，只是自动获取无参构造方法被替换成了 传入的构造方法
+	 *
+	 * @param bd the bean definition
+	 * @param beanName the name of the bean when it is created in this context.
+	 * @param owner the owning BeanFactory
+	 * @param ctor the constructor to use
+	 * @param args the constructor arguments to apply
+	 * @return Object
+	 */
 	@Override
 	public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner,
 			final Constructor<?> ctor, Object... args) {
@@ -169,6 +182,20 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 		throw new UnsupportedOperationException("Method Injection not supported in SimpleInstantiationStrategy");
 	}
 
+	/**
+	 * 实例化
+	 * 传入 工厂 Bean，工厂方法 和 参数
+	 *
+	 *
+	 * @param bd the bean definition
+	 * @param beanName the name of the bean when it is created in this context.
+	 * @param owner the owning BeanFactory
+	 * @param factoryBean the factory bean instance to call the factory method on,
+	 * or {@code null} in case of a static factory method
+	 * @param factoryMethod the factory method to use
+	 * @param args the factory method arguments to apply
+	 * @return Object
+	 */
 	@Override
 	public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner,
 			@Nullable Object factoryBean, final Method factoryMethod, Object... args) {
@@ -184,9 +211,12 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 				ReflectionUtils.makeAccessible(factoryMethod);
 			}
 
+			// 保存上一个工厂方法
 			Method priorInvokedFactoryMethod = currentlyInvokedFactoryMethod.get();
 			try {
+				// 传入当前提供的工厂方法
 				currentlyInvokedFactoryMethod.set(factoryMethod);
+				// 通过 factoryMethod.invoke 来创建对象
 				Object result = factoryMethod.invoke(factoryBean, args);
 				if (result == null) {
 					result = new NullBean();
@@ -195,6 +225,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 			}
 			finally {
 				if (priorInvokedFactoryMethod != null) {
+					// 还原
 					currentlyInvokedFactoryMethod.set(priorInvokedFactoryMethod);
 				}
 				else {

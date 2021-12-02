@@ -8,4 +8,8 @@ BeanDefinition, FactoryBean, BeanFactoryPostProcessor; —— 2021/11/18
 BeanFactoryPostProcessor, BeanFactoryAware, MethodReplacer; —— 2021/11/19  
   
 CustomEditorConfigurer, StringArrayPropertyEditor, FileEditor, LocaleEditor, PatternEditor,
-BeanWrapper, InstantiationStrategy, !TD SimpleInstantiationStrategy, !TD BeanUtils; —— 2021/12/1
+BeanWrapper, InstantiationStrategy, SimpleInstantiationStrategy, BeanUtils; —— 2021/12/1  
+
+CglibSubclassingInstantiationStrategy, BeanUtils, BeanFactory,
+ClassLoaderAwareGeneratorStrategy, LookupOverride; —— 2021/12/2  
+
