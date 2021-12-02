@@ -159,6 +159,7 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 			 * 将此接口用于新实例比通过 Enhance 接口或使用反射更快。
 			 * 此外，要拦截在对象构造期间调用的方法，您必须使用这些方法而不是反射。
 			 */
+
 			Factory factory = (Factory) instance;
 			factory.setCallbacks(new Callback[] {NoOp.INSTANCE,
 					new LookupOverrideMethodInterceptor(this.beanDefinition, this.owner),
