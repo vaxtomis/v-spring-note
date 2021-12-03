@@ -46,8 +46,12 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * BeanWrapper 可以嵌套，因此设计时要保存当前被包装对象、当前被包装对象的路径和最顶层对象
+ *
  * A basic {@link ConfigurablePropertyAccessor} that provides the necessary
  * infrastructure for all typical use cases.
+ *
+ * 一个基本的 {@link ConfigurablePropertyAccessor}，为所有典型用例提供必要的基础设施。
  *
  * <p>This accessor will convert collection and array values to the corresponding
  * target collections or arrays, if necessary. Custom property editors that deal
@@ -55,6 +59,11 @@ import org.springframework.util.StringUtils;
  * {@code setValue}, or against a comma-delimited String via {@code setAsText},
  * as String arrays are converted in such a format if the array itself is not
  * assignable.
+ *
+ * 如果有必要，此访问器会将集合和数组值转换为相应的目标集合或数组。
+ * 处理集合或数组的自定义属性编辑器可以通过 PropertyEditor 的 {@code setValue} 编写，
+ * 也可以通过 {@code setAsText} 针对逗号分隔的字符串编写，
+ * 如果数组本身不可分配，则字符串数组会被转换成目标格式。
  *
  * @author Juergen Hoeller
  * @author Stephane Nicoll
@@ -73,16 +82,21 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	/**
 	 * We'll create a lot of these objects, so we don't want a new logger every time.
+	 *
+	 * 这玩意创建的忒多了，每次都 new logger 就炸了。
 	 */
 	private static final Log logger = LogFactory.getLog(AbstractNestablePropertyAccessor.class);
 
 	private int autoGrowCollectionLimit = Integer.MAX_VALUE;
 
+	// 被 BeanWrapper 包装的对象
 	@Nullable
 	Object wrappedObject;
 
+	// 	当前 BeanWrapper 对象所属嵌套层次的属性名，最顶层的 BeanWrapper 此属性的值为空
 	private String nestedPath = "";
 
+	// 最顶层 BeanWrapper 所包装的对象
 	@Nullable
 	Object rootObject;
 

@@ -40,6 +40,12 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
+ * 简要的来说，就是通过 CGLIB 对一个 Bean 进行动态代理。
+ * 从而拦截其对应方法，通过 方法注入 或 方法替换 的方式找到方法实现
+ * 再将拦截的部分替换。
+ *
+ * 不是直接返回构造完成的对象实例，而是以 BeanWrapper 对构造完成的对象实例进行包裹。
+ *
  * Default object instantiation strategy for use in BeanFactories.
  *
  * 使用 BeanFactory 的默认对象实例化策略。
@@ -141,7 +147,7 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 			}
 			else {
 				try {
-					// 获取增强后的 Class 的 构造方法，并生成实例
+					// 获取增强后的 Class 的 构造方法，并生成实例（生成方法注入类的 Class 实例）
 					Constructor<?> enhancedSubclassConstructor = subclass.getConstructor(ctor.getParameterTypes());
 					instance = enhancedSubclassConstructor.newInstance(args);
 				}
@@ -157,13 +163,14 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 			 * CGLIB Factory 接口：
 			 * Enhancer 类返回的所有增强实例都实现了这个接口。
 			 * 将此接口用于新实例比通过 Enhance 接口或使用反射更快。
-			 * 此外，要拦截在对象构造期间调用的方法，您必须使用这些方法而不是反射。
+			 * 此外，要拦截在对象构造期间调用的方法，必须使用这些方法而不是反射。
 			 */
-
 			Factory factory = (Factory) instance;
+			// 设置回调
 			factory.setCallbacks(new Callback[] {NoOp.INSTANCE,
 					new LookupOverrideMethodInterceptor(this.beanDefinition, this.owner),
 					new ReplaceOverrideMethodInterceptor(this.beanDefinition, this.owner)});
+			System.out.println(instance.getClass().getTypeName());
 			return instance;
 		}
 

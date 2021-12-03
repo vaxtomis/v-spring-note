@@ -82,6 +82,9 @@ import org.springframework.util.ClassUtils;
  * Provides management of default editors and custom editors.
  * Mainly serves as base class for {@link BeanWrapperImpl}.
  *
+ * {@link PropertyEditorRegistry} 接口的基本实现。
+ * 提供对默认编辑器和自定义编辑器的管理。主要作为 {@link BeanWrapperImpl} 的基类。
+ *
  * @author Juergen Hoeller
  * @author Rob Harrop
  * @since 1.2.6
@@ -138,6 +141,8 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 	/**
 	 * Activate the default editors for this registry instance,
 	 * allowing for lazily registering default editors when needed.
+	 *
+	 * 激活此注册表实例的默认编辑器，允许在需要时延迟注册默认编辑器。
 	 */
 	protected void registerDefaultEditors() {
 		this.defaultEditorsActive = true;
@@ -149,6 +154,10 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 	 * <p>Those editors are not registered by default simply because they are in
 	 * general inappropriate for data binding purposes. Of course, you may register
 	 * them individually in any case, through {@link #registerCustomEditor}.
+	 *
+	 * 激活仅用于配置目的的配置值编辑器，例如 {@link org.springframework.beans.propertyeditors.StringArrayPropertyEditor}。
+	 * 这些编辑器在默认情况下未注册，仅仅是因为它们通常不适合用于数据绑定目的。
+	 * 当然，您可以在任何情况下通过 {@link #registerCustomEditor} 单独注册它们。
 	 */
 	public void useConfigValueEditors() {
 		this.configValueEditorsActive = true;
@@ -159,6 +168,11 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 	 * <p>Note that this is different from registering a custom editor in that the editor
 	 * semantically still is a default editor. A ConversionService will override such a
 	 * default editor, whereas custom editors usually override the ConversionService.
+	 *
+	 * 使用给定的属性编辑器覆盖指定类型的默认编辑器。
+	 * 请注意，这与注册自定义编辑器的不同之处在于，该编辑器在语义上仍然是默认编辑器。
+	 * ConversionService 将覆盖这样的默认编辑器，而自定义编辑器通常会覆盖 ConversionService。
+	 *
 	 * @param requiredType the type of the property
 	 * @param propertyEditor the editor to register
 	 * @see #registerCustomEditor(Class, PropertyEditor)
@@ -173,6 +187,9 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 	/**
 	 * Retrieve the default editor for the given property type, if any.
 	 * <p>Lazily registers the default editors, if they are active.
+	 *
+	 * 检索给定属性类型的默认编辑器（如果有）。延迟注册默认编辑器（如果它们处于活动状态）。
+	 *
 	 * @param requiredType type of the property
 	 * @return the default editor, or {@code null} if none found
 	 * @see #registerDefaultEditors
@@ -196,6 +213,8 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 
 	/**
 	 * Actually register the default editors for this registry instance.
+	 *
+	 * 实际注册此注册表实例的默认编辑器。
 	 */
 	private void createDefaultEditors() {
 		this.defaultEditors = new HashMap<>(64);
@@ -270,6 +289,9 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 
 	/**
 	 * Copy the default editors registered in this instance to the given target registry.
+	 *
+	 * 将在此实例中注册的默认编辑器复制到给定的目标注册表。
+	 *
 	 * @param target the target registry to copy to
 	 */
 	protected void copyDefaultEditorsTo(PropertyEditorRegistrySupport target) {

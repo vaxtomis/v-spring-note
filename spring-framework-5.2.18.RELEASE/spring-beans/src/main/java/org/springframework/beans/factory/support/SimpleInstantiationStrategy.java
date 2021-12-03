@@ -99,6 +99,9 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 							 * AccessController.doPrivileged是一个在 AccessController 类中的静态方法，
 							 * 允许在一个类实例中的代码通知这个 AccessController:它的代码主体是享受 "privileged(特权的)"，
 							 * 访问控制器因此中断栈检查，后续的栈帧对操作的资源不论是否有权限都无关。
+							 *
+							 * 应用无法直接访问某些系统资源，但应用又必须得到这些资源才能完成功能。
+							 * doPrivileged让程序突破当前域权限限制，临时扩大访问权限。
 							 */
 							constructorToUse = AccessController.doPrivileged(
 									// 获取 Class 的 getDeclaredConstructor

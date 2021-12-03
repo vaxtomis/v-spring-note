@@ -31,8 +31,14 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
 /**
+ * 将对象通过 BeanWrapper 包裹起来，提供了创建实例、属性修改、获取实例等方法。
+ * 有一个内部类 BeanPropertyHandler，
+ * 主要还是通过调用 PropertyDescriptor 的 readMethod 和 writeMethod 方法
+ *
  * Default {@link BeanWrapper} implementation that should be sufficient
  * for all typical use cases. Caches introspection results for efficiency.
+ *
+ * 默认 {@link BeanWrapper} 实现应该足以满足所有典型用例。缓存自检结果以提高效率。
  *
  * <p>Note: Auto-registers default property editors from the
  * {@code org.springframework.beans.propertyeditors} package, which apply
@@ -42,10 +48,20 @@ import org.springframework.util.ReflectionUtils;
  * across the application). See the base class
  * {@link PropertyEditorRegistrySupport} for details.
  *
+ * 自动注册 {@code org.springframework.beans.propertyeditors} 包中的默认属性编辑器，
+ * 也适用除了 JDK 标准 PropertyEditors 以外的编辑器。
+ * 应用程序可以调用 {@link #registerCustomEditor(Class, java.beans.PropertyEditor)} 方法
+ * 来为特定实例注册编辑器（即它们不在应用程序中共享）。
+ * 有关详细信息，请参阅基类 {@link PropertyEditorRegistrySupport}。
+ *
  * <p><b>NOTE: As of Spring 2.5, this is - for almost all purposes - an
  * internal class.</b> It is just public in order to allow for access from
  * other framework packages. For standard application access purposes, use the
  * {@link PropertyAccessorFactory#forBeanPropertyAccess} factory method instead.
+ *
+ * 从 Spring 2.5 开始，本类对于几乎所有用途来说都是一个内部类。
+ * 它设定为 public 只是便于从其他框架包进行访问。
+ * 对于标准应用程序访问目的，请改用 {@link PropertyAccessorFactory#forBeanPropertyAccess} 工厂方法。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -65,12 +81,16 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 	/**
 	 * Cached introspections results for this object, to prevent encountering
 	 * the cost of JavaBeans introspection every time.
+	 *
+	 * 缓存此对象的自省结果，以防止每次都遇到 JavaBeans 自检的成本。
 	 */
 	@Nullable
 	private CachedIntrospectionResults cachedIntrospectionResults;
 
 	/**
 	 * The security context used for invoking the property methods.
+	 *
+	 * 用于调用属性方法的安全上下文。
 	 */
 	@Nullable
 	private AccessControlContext acc;
@@ -79,6 +99,8 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 	/**
 	 * Create a new empty BeanWrapperImpl. Wrapped instance needs to be set afterwards.
 	 * Registers default editors.
+	 *
+	 * 创建一个新的空 BeanWrapperImpl。包装后的实例需要在之后设置。注册默认编辑器。
 	 * @see #setWrappedInstance
 	 */
 	public BeanWrapperImpl() {
@@ -137,6 +159,9 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 
 	/**
 	 * Set a bean instance to hold, without any unwrapping of {@link java.util.Optional}.
+	 *
+	 * 设置要持有的 bean 实例。
+	 *
 	 * @param object the actual target object
 	 * @since 4.3
 	 * @see #setWrappedInstance(Object)
@@ -198,6 +223,10 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 	 * Convert the given value for the specified property to the latter's type.
 	 * <p>This method is only intended for optimizations in a BeanFactory.
 	 * Use the {@code convertIfNecessary} methods for programmatic conversion.
+	 *
+	 * 将指定属性的给定值转换为后者的类型。
+	 * 此方法仅用于 BeanFactory 中的优化。使用 {@code convertIfNecessary} 方法进行编程转换。
+	 *
 	 * @param value the value to convert
 	 * @param propertyName the target property
 	 * (note that nested or indexed properties are not supported here)
@@ -207,11 +236,13 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 	@Nullable
 	public Object convertForProperty(@Nullable Object value, String propertyName) throws TypeMismatchException {
 		CachedIntrospectionResults cachedIntrospectionResults = getCachedIntrospectionResults();
+		// 去缓存中获取 propertyDescriptor
 		PropertyDescriptor pd = cachedIntrospectionResults.getPropertyDescriptor(propertyName);
 		if (pd == null) {
 			throw new InvalidPropertyException(getRootClass(), getNestedPath() + propertyName,
 					"No property '" + propertyName + "' found");
 		}
+		// 通过 propertyDescriptor 去获取 typeDescriptor
 		TypeDescriptor td = cachedIntrospectionResults.getTypeDescriptor(pd);
 		if (td == null) {
 			td = cachedIntrospectionResults.addTypeDescriptor(pd, new TypeDescriptor(property(pd)));
@@ -289,6 +320,7 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 		@Override
 		@Nullable
 		public Object getValue() throws Exception {
+			// 尝试获取 get 方法
 			Method readMethod = this.pd.getReadMethod();
 			if (System.getSecurityManager() != null) {
 				AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
@@ -305,6 +337,7 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 			}
 			else {
 				ReflectionUtils.makeAccessible(readMethod);
+				// 调用 get 方法
 				return readMethod.invoke(getWrappedInstance(), (Object[]) null);
 			}
 		}
@@ -329,6 +362,7 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 			}
 			else {
 				ReflectionUtils.makeAccessible(writeMethod);
+				// 调用 set 方法
 				writeMethod.invoke(getWrappedInstance(), value);
 			}
 		}
