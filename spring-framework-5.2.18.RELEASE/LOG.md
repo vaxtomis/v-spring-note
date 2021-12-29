@@ -14,4 +14,7 @@ BeanWrapper, InstantiationStrategy, SimpleInstantiationStrategy, BeanUtils; —�
 CglibSubclassingInstantiationStrategy, BeanUtils, BeanFactory,
 ClassLoaderAwareGeneratorStrategy, LookupOverride; —— 2021/12/2 
 
-BeanWrapperImpl, AbstractNestablePropertyAccessor, PropertyEditorRegistrySupport;—— 2021/12/3
+BeanWrapperImpl, AbstractNestablePropertyAccessor, PropertyEditorRegistrySupport; —— 2021/12/3
+
+BeanPostProcessor; -- 2021/12/29
+

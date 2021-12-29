@@ -31,6 +31,10 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
 /**
+ * Spring 会根据对象构造一个 BeanWrapperImpl 实例，
+ * 将 CustomEditorConfigurer 注册的 PropertyEditor 复制一份给
+ * BeanWrapperImpl 实例，所以 BeanWrapperImpl 同时也是 PropertyEditorRegistry
+ *
  * 将对象通过 BeanWrapper 包裹起来，提供了创建实例、属性修改、获取实例等方法。
  * 有一个内部类 BeanPropertyHandler，
  * 主要还是通过调用 PropertyDescriptor 的 readMethod 和 writeMethod 方法
@@ -82,7 +86,7 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 	 * Cached introspections results for this object, to prevent encountering
 	 * the cost of JavaBeans introspection every time.
 	 *
-	 * 缓存此对象的自省结果，以防止每次都遇到 JavaBeans 自检的成本。
+	 * 缓存此对象的自省结果，以防止每次都遇到 JavaBeans 自检。
 	 */
 	@Nullable
 	private CachedIntrospectionResults cachedIntrospectionResults;

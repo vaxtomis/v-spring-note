@@ -28,7 +28,7 @@ ApplicationContext 启动之后会实例化所有的 bean 定义，
 >#### Bean 实例化过程
 >* 实例化 Bean 对象
 >* 设置对象属性
->* 检查 Aware 相关接口并设置相关依赖
+>* 检查 Aware 相关接口并设置相关依赖（实例化完成且相关属性以及依赖设置完成后）
 >* BeanPostProcessor
 >* 检查是否是 InitializingBean 以决定是否调用 afterPropertiesSet 方法
 >* 检查是否配置有自定义的 init-method
