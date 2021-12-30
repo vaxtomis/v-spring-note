@@ -25,10 +25,15 @@ import org.springframework.lang.Nullable;
  * BeanFactoryPostProcessor 存在于容器启动阶段。
  * {@link BeanFactoryPostProcessor}
  *
+ * 调用 ConfigurableBeanFactory 的 addBeanPostProcessor() 方法
+ * 注册自定义 BeanPostProcessor。
+ * 对于 ApplicationContext，则将实现类通过通常 XML 配置即可（自动识别并加载注册）
+ * 在下方 Registration 有提到。
+ *
  * Factory hook that allows for custom modification of new bean instances &mdash;
  * for example, checking for marker interfaces or wrapping beans with proxies.
  *
- * 允许自定义修改新 bean 实例的工厂钩子——例如，检查标记接口或用代理包装 bean。
+ * 允许自定义修改新创建 bean 实例的工厂钩子 —— 例如，检查标记接口或用代理包装 bean。
  *
  * <p>Typically, post-processors that populate beans via marker interfaces
  * or the like will implement {@link #postProcessBeforeInitialization},
@@ -46,7 +51,7 @@ import org.springframework.lang.Nullable;
  *
  * 注册：
  * ApplicationContext 可以在其 bean 定义中自动检测 BeanPostProcessor bean，
- * 并将这些后处理器应用于随后创建的任何 bean。
+ * 并将这些后处理器应用于随后新建的任何 bean。
  * 一个普通的 BeanFactory 允许以编程方式注册后处理器，
  * 将它们应用于通过 BeanFactory 创建的所有 bean。
  *
@@ -65,7 +70,7 @@ import org.springframework.lang.Nullable;
  *
  * 顺序：
  * 在 ApplicationContext 中自动检测的 BeanPostProcessor bean，
- * 将根据 PriorityOrdered 和 Ordered 语义进行排序。
+ * 会根据 PriorityOrdered 和 Ordered 语义进行排序。
  * 相比之下，以编程方式注册到 BeanFactory 的 BeanPostProcessor bean 将按注册顺序应用；
  * 对于以编程方式注册的后处理器，通过实现 PriorityOrdered 或 Ordered 接口表达的任何排序语义都将被忽略。
  * 此外，@Order 注释不会被 BeanPostProcessor bean 考虑在内。

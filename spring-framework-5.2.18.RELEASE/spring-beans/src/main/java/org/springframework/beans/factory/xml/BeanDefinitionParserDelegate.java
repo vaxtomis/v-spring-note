@@ -73,6 +73,9 @@ import org.springframework.util.xml.DomUtils;
  * {@link BeanDefinitionParser BeanDefinitionParsers} or
  * {@link BeanDefinitionDecorator BeanDefinitionDecorators}.
  *
+ * 用于解析 XML bean 定义的有状态委托类。
+ * 供主解析器和任何扩展 BeanDefinitionParser 或 BeanDefinitionDecorator 使用。
+ *
  * @author Rob Harrop
  * @author Juergen Hoeller
  * @author Rod Johnson
@@ -237,6 +240,9 @@ public class BeanDefinitionParserDelegate {
 	 * Stores all used bean names so we can enforce uniqueness on a per
 	 * beans-element basis. Duplicate bean ids/names may not exist within the
 	 * same level of beans element nesting, but may be duplicated across levels.
+	 *
+	 * 存储所有使用的 bean 名称，以便我们可以在每个 bean 元素的基础上强制唯一性。
+	 * 重复的 bean id/名称可能不存在于 bean 元素嵌套的同一级别中，但可能会跨级别重复。
 	 */
 	private final Set<String> usedNames = new HashSet<>();
 
@@ -244,6 +250,8 @@ public class BeanDefinitionParserDelegate {
 	/**
 	 * Create a new BeanDefinitionParserDelegate associated with the supplied
 	 * {@link XmlReaderContext}.
+	 *
+	 * BeanDefinitionParserDelegate 的构造方法，与提供的 XmlReaderContext 关联。
 	 */
 	public BeanDefinitionParserDelegate(XmlReaderContext readerContext) {
 		Assert.notNull(readerContext, "XmlReaderContext must not be null");
@@ -253,6 +261,8 @@ public class BeanDefinitionParserDelegate {
 
 	/**
 	 * Get the {@link XmlReaderContext} associated with this helper instance.
+	 *
+	 * 获得与此 helper 实例关联的 XmlReaderContext。
 	 */
 	public final XmlReaderContext getReaderContext() {
 		return this.readerContext;
@@ -261,6 +271,9 @@ public class BeanDefinitionParserDelegate {
 	/**
 	 * Invoke the {@link org.springframework.beans.factory.parsing.SourceExtractor}
 	 * to pull the source metadata from the supplied {@link Element}.
+	 *
+	 * 调用 {@link org.springframework.beans.factory.parsing.SourceExtractor}
+	 * 从提供的 {@link Element} 中提取源元数据。
 	 */
 	@Nullable
 	protected Object extractSource(Element ele) {
@@ -291,6 +304,8 @@ public class BeanDefinitionParserDelegate {
 
 	/**
 	 * Initialize the default settings assuming a {@code null} parent delegate.
+	 *
+	 * 初始化默认设置。
 	 */
 	public void initDefaults(Element root) {
 		initDefaults(root, null);
@@ -303,6 +318,9 @@ public class BeanDefinitionParserDelegate {
 	 * defaults are not explicitly set locally.
 	 * @see #populateDefaults(DocumentDefaultsDefinition, DocumentDefaultsDefinition, org.w3c.dom.Element)
 	 * @see #getDefaults()
+	 *
+	 * 初始化默认的 lazy-init、autowire、依赖项检查设置、init-method、destroy-method 和 merge 设置。
+	 * 如果未在本地显式设置默认值，则通过回退到给定的父级来支持嵌套的 'beans' 元素用例。
 	 */
 	public void initDefaults(Element root, @Nullable BeanDefinitionParserDelegate parent) {
 		populateDefaults(this.defaults, (parent != null ? parent.defaults : null), root);
