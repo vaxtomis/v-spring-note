@@ -24,9 +24,17 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.lang.Nullable;
 
 /**
+ * 常用的几个实现
+ * {@link org.springframework.context.support.FileSystemXmlApplicationContext}
+ * {@link org.springframework.context.support.ClassPathXmlApplicationContext}
+ * {@link org.springframework.web.context.support.XmlWebApplicationContext}
+ *
  * Central interface to provide configuration for an application.
  * This is read-only while the application is running, but may be
  * reloaded if the implementation supports this.
+ *
+ * 为应用程序提供配置的中央接口。
+ * ApplicationContext 在应用程序运行时是只读的，此接口的实现可能会重新加载。
  *
  * <p>An ApplicationContext provides:
  * <ul>
@@ -44,10 +52,29 @@ import org.springframework.lang.Nullable;
  * its own child context that is independent of that of any other servlet.
  * </ul>
  *
+ * ApplicationContext 提供了：
+ * > 用于访问应用组件的 Bean 工厂方法。
+ * 继承自接口 {@link org.springframework.beans.factory.ListableBeanFactory}
+ * > 以通用方式加载文件资源的能力。
+ * 继承自接口 {@link org.springframework.core.io.ResourceLoader}
+ * > 能够将事件发布到注册的侦听器。
+ * 继承自接口 {@link ApplicationEventPublisher}
+ * > 解析消息的能力，支持国际化（I18n）。
+ * 继承自接口 {@link MessageSource}
+ *
+ * 继承自父类上下文。后代上下文中的定义将始终优先（子中的定义大于父）。
+ * 这意味着，单个父上下文可以被整个 Web 应用程序使用，
+ * 而每个 servlet 都有自己的子上下文，该子上下文独立于任何其他 servlet 的子上下文。
+ *
+ *
  * <p>In addition to standard {@link org.springframework.beans.factory.BeanFactory}
  * lifecycle capabilities, ApplicationContext implementations detect and invoke
  * {@link ApplicationContextAware} beans as well as {@link ResourceLoaderAware},
  * {@link ApplicationEventPublisherAware} and {@link MessageSourceAware} beans.
+ *
+ * 除了标准 BeanFactory 的生命周期功能外，ApplicationContext 实现了检测和调用
+ * {@link ApplicationContextAware}、{@link ResourceLoaderAware}
+ * {@link ApplicationEventPublisherAware}、{@link MessageSourceAware}
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -111,6 +138,20 @@ public interface ApplicationContext extends EnvironmentCapable, ListableBeanFact
 	 * never been called), or if the context has been closed already
 	 * @see ConfigurableApplicationContext#refresh()
 	 * @see ConfigurableApplicationContext#getBeanFactory()
+	 *
+	 * 为当前 context 暴露 AutowireCapableBeanFactory 功能。
+	 *
+	 * 这通常不被应用程序代码使用。
+	 * 除非，目的是初始化那些存在于应用程序上下文之外的 bean 实例，
+	 * 将 Spring bean 生命周期（全部或部分）应用于它们。
+	 * 或由 {@link ConfigurableApplicationContext} 接口公开的内部 BeanFactory
+	 * 也提供对 {@link AutowireCapableBeanFactory} 接口的访问。
+	 * 本方法主要作为 ApplicationContext 接口上的一个方便的、特定的工具。
+	 *
+	 * 注意：从 4.2 开始，此方法将在应用程序上下文关闭后始终抛出 IllegalStateException。
+	 * 在当前的 Spring Framework 版本中，只有可刷新的应用程序上下文才会这样做；
+	 * 从 4.2 开始，所有应用程序上下文实现都需要遵守。
+	 *
 	 */
 	AutowireCapableBeanFactory getAutowireCapableBeanFactory() throws IllegalStateException;
 

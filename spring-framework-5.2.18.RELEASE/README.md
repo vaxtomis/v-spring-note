@@ -29,14 +29,14 @@ ApplicationContext 启动之后会实例化所有的 bean 定义，
 >* 实例化 Bean 对象
 >* 设置对象属性
 >* 检查 Aware 相关接口并设置相关依赖（实例化完成且相关属性以及依赖设置完成后）
->* BeanPostProcessor
+>* BeanPostProcessor（Aware 检测到则通过 BeanPostProcessor）
 >* 检查是否是 InitializingBean 以决定是否调用 afterPropertiesSet 方法
->* 检查是否配置有自定义的 init-method
+>* 检查是否配置有自定义的 init-method（类似 afterPropertiesSet，耦合性更低）
 >* BeanPostProcessor 后置处理
 >* 注册必要的 Destruction 相关回调接口
 >* ---使用中---
->* 是否实现 DisposableBean 接口
->* 是否配置有自定义 destroy 方法  
+>* 是否实现 DisposableBean 接口（对应 InitializingBean）
+>* 是否配置有自定义 destroy-method（对应 init-method）
 >  
 >相关阅读:{AbstractBeanFactory#getBean},
 >{AbstractAutowireCapableBeanFactory#createBean};

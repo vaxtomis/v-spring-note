@@ -18,6 +18,7 @@ BeanWrapperImpl, AbstractNestablePropertyAccessor, PropertyEditorRegistrySupport
 
 BeanPostProcessor; -- 2021/12/29
 
-InitializingBean, BeanDefinitionParserDelegate(TODO); -- 2021/12/30
+InitializingBean, BeanDefinitionParserDelegate; -- 2021/12/30
 
+DisposableBean, ApplicationContext, Resource, ResourceLoader; -- 2021/12/31
 
