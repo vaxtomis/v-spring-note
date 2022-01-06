@@ -22,3 +22,6 @@ InitializingBean, BeanDefinitionParserDelegate; -- 2021/12/30
 
 DisposableBean, ApplicationContext, Resource, ResourceLoader; -- 2021/12/31
 
+## 2022
+### 2022-1
+DefaultResourceLoader; -- 2022/1/6
