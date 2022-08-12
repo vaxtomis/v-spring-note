@@ -88,7 +88,11 @@ class BeanDefinitionValueResolver {
 
 	/**
 	 * Given a PropertyValue, return a value, resolving any references to other
-	 * beans in the factory if necessary. The value could be:
+	 * beans in the factory if necessary. <br><br>
+	 *
+	 * 给定一个 PropertyValue，返回一个转换后的值，必要时解析对工厂中其他 bean 的任何引用。<br><br>
+	 *
+	 * The value could be:
 	 * <li>A BeanDefinition, which leads to the creation of a corresponding
 	 * new bean instance. Singleton flags and names of such "inner beans"
 	 * are always ignored: Inner beans are anonymous prototypes.

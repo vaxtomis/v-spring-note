@@ -60,7 +60,9 @@ public abstract class PropertyAccessorUtils {
 
 	/**
 	 * Determine the first nested property separator in the
-	 * given property path, ignoring dots in keys (like "map[my.key]").
+	 * given property path, ignoring dots in keys (like "map[my.key]").<br><br>
+	 *
+	 * 确定给定属性路径中的第一个嵌套属性分隔符，忽略键中的点（如 "map[my.key]"）。<br><br>
 	 * @param propertyPath the property path to check
 	 * @return the index of the nested property separator, or -1 if none
 	 */
@@ -89,12 +91,17 @@ public abstract class PropertyAccessorUtils {
 		boolean inKey = false;
 		int length = propertyPath.length();
 		int i = (last ? length - 1 : 0);
+		// 获取 first 时，终止条件为 i < length
 		while (last ? i >= 0 : i < length) {
+			// 依次分析路径的字符
 			switch (propertyPath.charAt(i)) {
+				// 遇到 [ 或 ] 时，控制 inKey 的开闭
+				// 即为，inKey 为 true 时，表示在 [] 内部
 				case PropertyAccessor.PROPERTY_KEY_PREFIX_CHAR:
 				case PropertyAccessor.PROPERTY_KEY_SUFFIX_CHAR:
 					inKey = !inKey;
 					break;
+				// 寻找 '.'，且如果 '.' 不在 [] 内部，返回下标
 				case PropertyAccessor.NESTED_PROPERTY_SEPARATOR_CHAR:
 					if (!inKey) {
 						return i;
@@ -103,6 +110,7 @@ public abstract class PropertyAccessorUtils {
 			if (last) {
 				i--;
 			}
+			// 获取 first 时，从前往后处理
 			else {
 				i++;
 			}

@@ -34,7 +34,8 @@ import org.springframework.util.StringUtils;
 /**
  * The default implementation of the {@link PropertyValues} interface.
  * Allows simple manipulation of properties, and provides constructors
- * to support deep copy and construction from a Map.
+ * to support deep copy and construction from a Map.<br><br>
+ * {@link PropertyValues} 接口的默认实现。允许对属性进行简单操作，并提供构造函数以支持从 Map 进行深度复制和构造。<br><br>
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -359,7 +360,8 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 
 	/**
 	 * Return whether this holder contains converted values only ({@code true}),
-	 * or whether the values still need to be converted ({@code false}).
+	 * or whether the values still need to be converted ({@code false}).<br><br>
+	 * 返回此持有者是否仅包含转换后的值（{@code true}），或者这些值是否仍需要转换（{@code false}）。
 	 */
 	public boolean isConverted() {
 		return this.converted;

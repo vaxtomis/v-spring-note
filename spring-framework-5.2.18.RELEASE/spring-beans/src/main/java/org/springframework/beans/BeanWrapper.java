@@ -19,35 +19,35 @@ package org.springframework.beans;
 import java.beans.PropertyDescriptor;
 
 /**
- * The central interface of Spring's low-level JavaBeans infrastructure.
+ * The central interface of Spring's low-level JavaBeans infrastructure.<br><br>
  *
- * Spring JavaBeans 底层基础结构的核心接口。
+ * Spring JavaBeans 底层基础结构的核心接口。<br><br>
  *
  * <p>Typically not used directly but rather implicitly via a
  * {@link org.springframework.beans.factory.BeanFactory} or a
- * {@link org.springframework.validation.DataBinder}.
+ * {@link org.springframework.validation.DataBinder}.<br><br>
  *
  * 通常不直接使用，而是通过 {@link org.springframework.beans.factory.BeanFactory}
- * 或 {@link org.springframework.validation.DataBinder} 隐式使用。
+ * 或 {@link org.springframework.validation.DataBinder} 隐式使用。<br><br>
  *
  * <p>Provides operations to analyze and manipulate standard JavaBeans:
  * the ability to get and set property values (individually or in bulk),
- * get property descriptors, and query the readability/writability of properties.
+ * get property descriptors, and query the readability/writability of properties.<br><br>
  *
  * 提供分析和操作标准 JavaBeans 的功能：获取和设置属性值（单独或批量）、
- * 获取属性描述符和查询属性的可读性/可写性的能力。
+ * 获取属性描述符和查询属性的可读性/可写性的能力。<br><br>
  *
  * <p>This interface supports <b>nested properties</b> enabling the setting
- * of properties on subproperties to an unlimited depth.
+ * of properties on subproperties to an unlimited depth.<br><br>
  *
- * 此接口支持嵌套属性，可以将子属性上的属性设置为 unlimited depth （无限层嵌套）。
+ * 此接口支持嵌套属性，可以将子属性上的属性设置为 unlimited depth （无限层嵌套）。<br><br>
  *
  * <p>A BeanWrapper's default for the "extractOldValueForEditor" setting
  * is "false", to avoid side effects caused by getter method invocations.
- * Turn this to "true" to expose present property values to custom editors.
+ * Turn this to "true" to expose present property values to custom editors.<br><br>
  *
  * BeanWrapper 的 "extractOldValueForEditor" 设置默认为 "false"，
- * 以避免由 getter 方法调用引起的副作用。将此设置为 "true" 以向自定义编辑器公开当前属性值。
+ * 以避免由 getter 方法调用引起的副作用。将此设置为 "true" 以向自定义编辑器公开当前属性值。<br><br>
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

@@ -46,24 +46,24 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * BeanWrapper 可以嵌套，因此设计时要保存当前被包装对象、当前被包装对象的路径和最顶层对象
+ * BeanWrapper 可以嵌套，因此设计时要保存当前被包装对象、当前被包装对象的路径和最顶层对象。<br><br>
  *
  * A basic {@link ConfigurablePropertyAccessor} that provides the necessary
- * infrastructure for all typical use cases.
+ * infrastructure for all typical use cases.<br><br>
  *
- * 一个基本的 {@link ConfigurablePropertyAccessor}，为所有典型用例提供必要的基础设施。
+ * 一个基本的 {@link ConfigurablePropertyAccessor}，为所有典型用例提供必要的基础设施。<br><br>
  *
  * <p>This accessor will convert collection and array values to the corresponding
  * target collections or arrays, if necessary. Custom property editors that deal
  * with collections or arrays can either be written via PropertyEditor's
  * {@code setValue}, or against a comma-delimited String via {@code setAsText},
  * as String arrays are converted in such a format if the array itself is not
- * assignable.
+ * assignable.<br><br>
  *
  * 如果有必要，此访问器会将集合和数组值转换为相应的目标集合或数组。
  * 处理集合或数组的自定义属性编辑器可以通过 PropertyEditor 的 {@code setValue} 编写，
  * 也可以通过 {@code setAsText} 针对逗号分隔的字符串编写，
- * 如果数组本身不可分配，则字符串数组会被转换成目标格式。
+ * 如果数组本身不可分配，则字符串数组会被转换成目标格式。<br><br>
  *
  * @author Juergen Hoeller
  * @author Stephane Nicoll
@@ -81,7 +81,7 @@ import org.springframework.util.StringUtils;
 public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyAccessor {
 
 	/**
-	 * We'll create a lot of these objects, so we don't want a new logger every time.
+	 * We'll create a lot of these objects, so we don't want a new logger every time.<br><br>
 	 *
 	 * 这玩意创建的忒多了，每次都 new logger 就炸了。
 	 */
@@ -239,7 +239,8 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	}
 
 	/**
-	 * Return the class of the root object at the top of the path of this accessor.
+	 * Return the class of the root object at the top of the path of this accessor.<br><br>
+	 * 返回此访问器路径顶部的根对象的类。
 	 * @see #getNestedPath
 	 */
 	public final Class<?> getRootClass() {
@@ -250,12 +251,17 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	public void setPropertyValue(String propertyName, @Nullable Object value) throws BeansException {
 		AbstractNestablePropertyAccessor nestedPa;
 		try {
+			// 通过属性名获取（可以通过递归获取到最末端） AbstractNestablePropertyAccessor
 			nestedPa = getPropertyAccessorForPropertyPath(propertyName);
 		}
 		catch (NotReadablePropertyException ex) {
 			throw new NotWritablePropertyException(getRootClass(), this.nestedPath + propertyName,
 					"Nested property in path '" + propertyName + "' does not exist", ex);
 		}
+		// 将给定的属性名称解析为相应的属性名称标记
+		// 例如我们的Person对象中有一个List<String> name的属性，
+		// 那么我们在绑定时，需要对List中的元素进行赋值，所有我们会使用name[0],name[1]这种方式来进行绑定，
+		// 而PropertyTokenHolder中有三个属性，其中actualName代表name,canonicalName代表整个表达式name[0],而key则代表0这个下标位置
 		PropertyTokenHolder tokens = getPropertyNameTokens(getFinalPath(nestedPa, propertyName));
 		nestedPa.setPropertyValue(tokens, new PropertyValue(propertyName, value));
 	}
@@ -428,6 +434,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 		return propValue;
 	}
 
+	//
 	private void processLocalProperty(PropertyTokenHolder tokens, PropertyValue pv) {
 		PropertyHandler ph = getLocalPropertyHandler(tokens.actualName);
 		if (ph == null || !ph.isWritable()) {
@@ -821,13 +828,20 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	}
 
 	/**
-	 * Recursively navigate to return a property accessor for the nested property path.
+	 * Recursively navigate to return a property accessor for the nested property path.<br><br>
+	 * 递归导航以返回嵌套属性路径的属性访问器。
 	 * @param propertyPath property path, which may be nested
 	 * @return a property accessor for the target bean
 	 */
 	protected AbstractNestablePropertyAccessor getPropertyAccessorForPropertyPath(String propertyPath) {
+		// 获取第一个嵌套属性分隔符索引
+		// 例如若 propertyPath 为 "human.hand.finger"，则 pos 返回 human 后的 '.' 下标
 		int pos = PropertyAccessorUtils.getFirstNestedPropertySeparatorIndex(propertyPath);
 		// Handle nested properties recursively.
+		// 获取到 pos 后，可以将 propertyPath 分为两部分
+		// 前部分 nestedProperty 和 后半部分 nestedPath
+		// 通过 nestedProperty 可以得到其 NestedPropertyAccessor
+		// 对于后半部分 nestedPath，继续递归处理，直到获取到最末端属性的 NestedPropertyAccessor
 		if (pos > -1) {
 			String nestedProperty = propertyPath.substring(0, pos);
 			String nestedPath = propertyPath.substring(pos + 1);
@@ -939,28 +953,52 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	}
 
 	/**
-	 * Parse the given property name into the corresponding property name tokens.
+	 * Parse the given property name into the corresponding property name tokens.<br><br>
+	 *
+	 * 将给定的属性名称解析为相应的属性名称标记。<br><br>
+	 *
+	 * 例如，如 propertyName为 "name[0][0]"
+	 * 那么 PropertyTokenHolder 应该包含：
+	 * <li>actualName = "name"</li>
+	 * <li>keys = {0, 0}</li>
+	 *
 	 * @param propertyName the property name to parse
 	 * @return representation of the parsed property tokens
 	 */
 	private PropertyTokenHolder getPropertyNameTokens(String propertyName) {
+		// 初始 actualName
 		String actualName = null;
 		List<String> keys = new ArrayList<>(2);
+		// index 初始位置
 		int searchIndex = 0;
+		// 例：name[0]
+		// actualName 代表 name
+		// canonicalName 代表整个表达式name[0]
+		// key 代表 0 这个下标位置
 		while (searchIndex != -1) {
+			// key 的开始位置位于 [ 标志
 			int keyStart = propertyName.indexOf(PROPERTY_KEY_PREFIX, searchIndex);
+			// 获得 key 的起始位置后，置 index 为 -1
 			searchIndex = -1;
+			// 第一轮一定会进入以下逻辑，第二轮后只有存在 [ 标志才会进入
 			if (keyStart != -1) {
+				// 获取同一层嵌套对应 ] 位置（不会错配）
+				// 例如 name[[[]]]，keyStart 为第一个 [ ，则通过此方法应获取到最后一个 ]
 				int keyEnd = getPropertyNameKeyEnd(propertyName, keyStart + PROPERTY_KEY_PREFIX.length());
+				// 存在 ]
 				if (keyEnd != -1) {
 					if (actualName == null) {
+						// actualName 应为 [ 之前的部分（ "name[0]" 中的 "name"）
 						actualName = propertyName.substring(0, keyStart);
 					}
+					// key 应为 [ 和 ] 之间的值 （ "name[0]" 中的 "0"）
 					String key = propertyName.substring(keyStart + PROPERTY_KEY_PREFIX.length(), keyEnd);
+					// 如果被 '' 或 "" 包裹则去掉
 					if (key.length() > 1 && (key.startsWith("'") && key.endsWith("'")) ||
 							(key.startsWith("\"") && key.endsWith("\""))) {
 						key = key.substring(1, key.length() - 1);
 					}
+					// 在 keys 中增加 key，继续逻辑
 					keys.add(key);
 					searchIndex = keyEnd + PROPERTY_KEY_SUFFIX.length();
 				}
@@ -977,8 +1015,13 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	}
 
 	private int getPropertyNameKeyEnd(String propertyName, int startIndex) {
+		// 记录未关闭的前缀数量
 		int unclosedPrefixes = 0;
 		int length = propertyName.length();
+		// 从开始下标开始遍历，遇到 [ 则未闭前缀计数增加，遇到 ] 则减少，如果完全关闭则返回下标值
+		// 注意，此时初始前缀并未关闭，即 propertyName="[name[0]name[1]name[2]]"
+		// 进入时，startIndex 应为 1，也就是处理的部分为 "name[0]name[1]name[2]]"
+		// 因此处理到最后一个 ] 时，才会返回下标，这保证了只返回同一层嵌套的开闭标志下标
 		for (int i = startIndex; i < length; i++) {
 			switch (propertyName.charAt(i)) {
 				case PropertyAccessor.PROPERTY_KEY_PREFIX_CHAR:
