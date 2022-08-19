@@ -807,9 +807,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
-	 * Template method which can be overridden to add context-specific refresh work.
-	 * Called on initialization of special beans, before instantiation of singletons.
-	 * <p>This implementation is empty.
+	 * template method which can be overridden to add context-specific refresh work.
+	 * called on initialization of special beans, before instantiation of singletons.
+	 * <p>this implementation is empty.<br><br>
+	 * 模板方法可以被覆盖以添加特定于上下文的刷新工作。
+	 * 在单例实例化之前调用特殊 bean 的初始化。
+	 * Spring Boot 通过此方法嵌入 tomcat
 	 * @throws BeansException in case of errors
 	 * @see #refresh()
 	 */

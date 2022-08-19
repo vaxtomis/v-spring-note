@@ -33,23 +33,23 @@ import org.springframework.util.StringUtils;
 /**
  * 首先检查路径是否以 classpath: 前缀打头，如果是则尝试构造 ClassPathResource 返回
  * 否则，尝试通过 URL，根据资源路径来定位资源，没有抛出异常则构造 UrlResource 返回
- * 如还是无法根据资源路径定位指定资源，则委托 getResourceByPath(String)
+ * 如还是无法根据资源路径定位指定资源，则委托 getResourceByPath(String)<br><br>
  *
  * Default implementation of the {@link ResourceLoader} interface.
  * Used by {@link ResourceEditor}, and serves as base class for
  * {@link org.springframework.context.support.AbstractApplicationContext}.
- * Can also be used standalone.
+ * Can also be used standalone.<br><br>
  *
  * 实现了 ResourceLoader 接口，被 ResourceEditor 所使用，
  * 并且作为 AbstractApplicationContext 的父类.
- * 也可以独立使用。
+ * 也可以独立使用。<br><br>
  *
  * <p>Will return a {@link UrlResource} if the location value is a URL,
  * and a {@link ClassPathResource} if it is a non-URL path or a
- * "classpath:" pseudo-URL.
+ * "classpath:" pseudo-URL.<br><br>
  *
  * 如果地址值为 URL，会返回 UrlResource，如果是一个 非 URL 路径或者是类路径（伪地址），
- * 则会返回 ClassPathResource。
+ * 则会返回 ClassPathResource。<br><br>
  *
  * @author Juergen Hoeller
  * @since 10.03.2004
