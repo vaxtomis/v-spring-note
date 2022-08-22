@@ -47,6 +47,10 @@ import org.springframework.util.StringValueResolver;
  * <p>Application contexts will automatically register this with their
  * underlying bean factory. Applications do not use this directly.
  *
+ * <br><br>
+ *
+ * 应用程序上下文将自动将其注册到其底层 bean 工厂，应用程序不直接使用它
+ *
  * @author Juergen Hoeller
  * @author Costin Leau
  * @author Chris Beams

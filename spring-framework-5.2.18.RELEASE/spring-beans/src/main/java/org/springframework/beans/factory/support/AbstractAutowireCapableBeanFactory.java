@@ -90,16 +90,41 @@ import org.springframework.util.StringUtils;
  * Implements the {@link org.springframework.beans.factory.config.AutowireCapableBeanFactory}
  * interface in addition to AbstractBeanFactory's {@link #createBean} method.
  *
+ * <br><br>
+ *
+ * 实现默认 bean 创建的抽象 bean 工厂超类，具有 {@link RootBeanDefinition} 类指定的全部功能。
+ * 除了 AbstractBeanFactory 的 {@link createBean} 方法外，
+ * 还实现了 {@link org.springframework.beans.factory.config.AutowireCapableBeanFactory} 接口
+ *
+ * <br><br>
+ *
  * <p>Provides bean creation (with constructor resolution), property population,
  * wiring (including autowiring), and initialization. Handles runtime bean
  * references, resolves managed collections, calls initialization methods, etc.
  * Supports autowiring constructors, properties by name, and properties by type.
+ *
+ * <br><br>
+ *
+ * 提供 bean 创建（使用构造函数解析）、属性填充、连接（包括自动连接）和初始化。
+ * 处理运行时 bean 引用、解析托管集合、调用初始化方法等。
+ * 支持自动装配构造函数、按名称的属性和按类型的属性
+ *
+ * <br><br>
  *
  * <p>The main template method to be implemented by subclasses is
  * {@link #resolveDependency(DependencyDescriptor, String, Set, TypeConverter)},
  * used for autowiring by type. In case of a factory which is capable of searching
  * its bean definitions, matching beans will typically be implemented through such
  * a search. For other factory styles, simplified matching algorithms can be implemented.
+ *
+ * <br><br>
+ *
+ * 子类要实现的主要模板方法是{@link resolveDependency(DependencyDescriptor, String, Set, TypeConverter)}，
+ * 用于按类型自动装配。
+ * 如果工厂能够搜索其 bean 定义，匹配的 bean 通常将通过这样的搜索来实现。
+ * 对于其他工厂风格，可以实现简化的匹配算法
+ *
+ * <br><br>
  *
  * <p>Note that this class does <i>not</i> assume or implement bean definition
  * registry capabilities. See {@link DefaultListableBeanFactory} for an implementation

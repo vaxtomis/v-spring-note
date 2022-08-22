@@ -23,6 +23,14 @@ package org.springframework.beans.factory;
  * brittle dependence on external configuration, as well as a possibly
  * unnecessary dependence on a Spring API.
  *
+ * <br><br>
+ *
+ * 由希望在 bean 工厂中了解其 bean 名称的 bean 实现的接口。
+ * 请注意，通常不建议对象依赖于其 bean 名称，因为这表示对外部配置的潜在脆弱依赖，
+ * 以及对 Spring API 的可能不必要的依赖。
+ *
+ * <br><br>
+ *
  * <p>For a list of all bean lifecycle methods, see the
  * {@link BeanFactory BeanFactory javadocs}.
  *

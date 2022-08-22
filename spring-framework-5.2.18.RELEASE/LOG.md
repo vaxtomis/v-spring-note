@@ -29,3 +29,5 @@ DefaultResourceLoader; -- 2022/1/6
 AbstractAutowireCapableBeanFactory, AbstractPropertyAccessor, AbstractNestablePropertyAccessor,
 PropertyAccessorUtils; -- 2022/8/11
 BeanReference; -- 2022/8/12
+Aware, BeanFactoryAware, BeanClassLoaderAware, BeanNameAware, ApplicationContextAware,
+ApplicationContextAwareProcessor, AbstractAutowireCapableBeanFactory; -- 2022/8/22
